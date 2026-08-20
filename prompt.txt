@@ -1,0 +1,714 @@
+buatkan issue.md yang berisi perencanaan untuk nanti diimplementasikan oleh junior programer atau ai model yang lebih murah.
+
+isi dari planningnya: 
+
+You are a Senior Quant Developer, Senior Python Engineer, Senior Full Stack Developer, and UI/UX Designer.
+
+Build a production-grade AI Stock Scanner for the Indonesia Stock Exchange (IDX).
+
+The application must be modular, scalable, and follow clean architecture.
+
+Requirements:
+
+- FastAPI backend
+- PostgreSQL database
+- SQLAlchemy ORM
+- JWT Authentication
+- React + NextJS frontend
+- TailwindCSS
+- Docker support
+- Scheduler
+- REST API
+- TradingView Chart integration
+- Responsive Dashboard
+- Dark/Light Theme
+- Clean Code
+- SOLID Principles
+- Repository Pattern
+- Service Layer
+- Background Jobs
+
+
+PROMPT 1
+System Architecture
+You are a Senior Quant Developer, Senior Python Engineer, Senior Full Stack Developer, and UI/UX Designer.
+
+
+Build a production-grade AI Stock Scanner for the Indonesia Stock Exchange (IDX).
+
+
+The application must be modular, scalable, and follow clean architecture.
+
+
+Requirements:
+
+
+- FastAPI backend
+- PostgreSQL database
+- SQLAlchemy ORM
+- JWT Authentication
+- React + NextJS frontend
+- TailwindCSS
+- Docker support
+- Scheduler
+- REST API
+- TradingView Chart integration
+- Responsive Dashboard
+- Dark/Light Theme
+- Clean Code
+- SOLID Principles
+- Repository Pattern
+- Service Layer
+- Background Jobs
+
+
+Generate folder structure first.
+
+
+Do NOT generate code yet.
+
+
+Explain every module.
+
+
+PROMPT 2
+
+Design a complete PostgreSQL database for an AI Stock Scanner.
+
+
+Tables must include:
+
+
+users
+
+
+roles
+
+
+permissions
+
+
+watchlist
+
+
+portfolio
+
+
+transactions
+
+
+stocks
+
+
+daily_prices
+
+
+financials
+
+
+foreign_flow
+
+
+broker_summary
+
+
+dividend
+
+
+corporate_action
+
+
+scanner_results
+
+
+technical_indicators
+
+
+alerts
+
+
+alert_logs
+
+
+news
+
+
+market_sentiment
+
+
+settings
+
+
+system_logs
+
+
+Create:
+
+
+ERD
+
+
+Primary Keys
+
+
+Foreign Keys
+
+
+Indexes
+
+
+SQL scripts
+
+
+Do not skip normalization.
+
+
+PROMPT 3
+
+Create a Data Import Engine.
+
+
+Sources:
+
+
+IDX
+Yahoo Finance
+AlphaVantage
+Polygon
+Financial Statements
+Broker Summary
+Foreign Flow
+
+
+Requirements:
+
+
+Automatic Scheduler
+
+
+Retry
+
+
+Logging
+
+
+Error Handling
+
+
+Data Validation
+
+
+Duplicate Prevention
+
+
+Incremental Update
+
+
+Create API and Services.
+PROMPT 4
+Technical Indicator Engine
+
+Ini bagian paling penting.
+
+Create a Technical Indicator Engine.
+
+
+Indicators:
+
+
+RSI
+
+
+MACD
+
+
+EMA
+
+
+SMA
+
+
+ATR
+
+
+ADX
+
+
+CCI
+
+
+ROC
+
+
+VWAP
+
+
+Supertrend
+
+
+Bollinger Band
+
+
+Stochastic
+
+
+OBV
+
+
+Money Flow Index
+
+
+Ichimoku
+
+
+Calculate all indicators for every IDX stock daily.
+
+
+Store into database.
+
+
+Optimize performance.
+
+
+Use vectorized pandas operations.
+PROMPT 5
+Hidden Divergence
+Build an Advanced Divergence Detection Engine.
+
+
+Requirements:
+
+
+Regular Bullish Divergence
+
+
+Regular Bearish Divergence
+
+
+Hidden Bullish Divergence
+
+
+Hidden Bearish Divergence
+
+
+Support:
+
+
+RSI
+
+
+MACD
+
+
+MACD Histogram
+
+
+Stochastic
+
+
+CCI
+
+
+Detection Rules:
+
+
+Pivot-based detection
+
+
+Configurable Pivot Length
+
+
+No repaint
+
+
+Minimum Swing Distance
+
+
+Trend Confirmation
+
+
+Confidence Score
+
+
+Store every signal into database.
+
+
+Generate explanation for every detected signal.
+PROMPT 6
+Screening Engine
+
+Inilah "otaknya".
+
+Create an AI Screening Engine.
+
+
+Scanner Conditions:
+
+
+Close > MA50
+
+
+Close > MA200
+
+
+MA50 > MA200
+
+
+Volume > SMA20 Volume
+
+
+Relative Volume >1.2
+
+
+Hidden Bullish RSI
+
+
+Hidden Bullish MACD
+
+
+Foreign Buy Positive
+
+
+ROE >15
+
+
+PER <15
+
+
+PBV <2
+
+
+DER <1
+
+
+Revenue Growth >10%
+
+
+EPS Growth >5%
+
+
+Dividend Yield >3%
+
+
+Market Cap >2 Trillion
+
+
+Average Daily Transaction >10 Billion
+
+
+Rank every stock.
+
+
+Generate Score 0-100.
+PROMPT 7
+AI Score
+Create a Ranking Algorithm.
+
+
+Weight:
+
+
+Trend
+
+
+25%
+
+
+Momentum
+
+
+20%
+
+
+Volume
+
+
+10%
+
+
+Foreign
+
+
+10%
+
+
+Fundamental
+
+
+25%
+
+
+Dividend
+
+
+5%
+
+
+Risk
+
+
+5%
+
+
+Output:
+
+
+Score
+
+
+Recommendation
+
+
+Target Price
+
+
+Risk Level
+
+
+Position Size
+
+
+Expected Return
+PROMPT 8
+Dashboard
+Create a Professional Dashboard.
+
+
+Pages:
+
+
+Dashboard
+
+
+Scanner
+
+
+Hidden Divergence
+
+
+Watchlist
+
+
+Portfolio
+
+
+Alerts
+
+
+Financial
+
+
+Dividend
+
+
+Foreign Flow
+
+
+Broker Summary
+
+
+Backtest
+
+
+Settings
+
+
+Admin
+
+
+Charts:
+
+
+Candlestick
+
+
+Heatmap
+
+
+Sector Rotation
+
+
+Treemap
+
+
+Foreign Flow
+
+
+Volume Profile
+
+
+Responsive Design.
+
+
+Dark Theme.
+PROMPT 9
+AI Analysis
+Create AI Stock Analysis.
+
+
+Generate automatically:
+
+
+Business Summary
+
+
+Technical Analysis
+
+
+Fundamental Analysis
+
+
+Valuation
+
+
+DCF
+
+
+PER
+
+
+PBV
+
+
+Dividend Analysis
+
+
+Risk Analysis
+
+
+Catalyst
+
+
+Recommendation
+
+
+Target Price
+
+
+Output in markdown.
+PROMPT 10
+Alert
+Create Alert Engine.
+
+
+Telegram
+
+
+WhatsApp
+
+
+Email
+
+
+Browser Notification
+
+
+Trigger:
+
+
+Hidden Bullish
+
+
+Golden Cross
+
+
+Volume Breakout
+
+
+Foreign Buy
+
+
+Price Target
+
+
+Stop Loss
+
+
+Trailing Stop
+
+
+Support Resistance
+
+
+Alert History.
+PROMPT 11
+Backtest
+Create a Professional Backtesting Module.
+
+
+Features:
+
+
+Walk Forward Test
+
+
+Monte Carlo
+
+
+Risk Analysis
+
+
+Win Rate
+
+
+Sharpe Ratio
+
+
+Sortino
+
+
+Profit Factor
+
+
+Drawdown
+
+
+Expectancy
+
+
+Average Holding Days
+
+
+Generate Report.
+
+
+Export PDF.
+PROMPT 12
+Deployment
+Prepare production deployment.
+
+
+Docker
+
+
+Docker Compose
+
+
+Nginx
+
+
+SSL
+
+
+Ubuntu
+
+
+Systemd
+
+
+Backup
+
+
+Logging
+
+
+Monitoring
+
+
+GitHub Actions
+
+
+CI/CD
+
+
+Auto Update.

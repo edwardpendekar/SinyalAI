@@ -5,6 +5,7 @@ from app.api.v1.import_endpoints import router as import_router
 from app.api.v1.analysis_endpoints import router as analysis_router
 from app.api.v1.alert_endpoints import router as alert_router
 from app.api.v1.backtest_endpoints import router as backtest_router
+from app.api.v1.scanner_endpoints import router as scanner_router
 from app.core.config import settings
 from app.db.session import engine, Base
 
@@ -39,6 +40,7 @@ app.include_router(import_router, prefix="/api/v1")
 app.include_router(analysis_router, prefix="/api/v1")
 app.include_router(alert_router, prefix="/api/v1")
 app.include_router(backtest_router, prefix="/api/v1")
+app.include_router(scanner_router, prefix="/api/v1")
 
 @app.on_event("startup")
 def startup_event():

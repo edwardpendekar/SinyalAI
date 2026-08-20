@@ -54,13 +54,76 @@ class DataImportEngine:
         """
         # Simulasi beberapa emiten BEI utama
         return [
+            # Perbankan (Financials)
             {"ticker": "BBCA", "name": "Bank Central Asia Tbk.", "sector": "Financials", "sub_sector": "Banks"},
-            {"ticker": "TLKM", "name": "Telkom Indonesia Tbk.", "sector": "Infrastructure", "sub_sector": "Telecommunication"},
             {"ticker": "BBRI", "name": "Bank Rakyat Indonesia Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "BMRI", "name": "Bank Mandiri Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "BBNI", "name": "Bank Negara Indonesia Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "BRIS", "name": "Bank Syariah Indonesia Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "ARTO", "name": "Bank Jago Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "BBTN", "name": "Bank Tabungan Negara Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            
+            # Telekomunikasi & Infrastruktur (Infrastructure)
+            {"ticker": "TLKM", "name": "Telkom Indonesia Tbk.", "sector": "Infrastructure", "sub_sector": "Telecommunication"},
+            {"ticker": "ISAT", "name": "Indosat Tbk.", "sector": "Infrastructure", "sub_sector": "Telecommunication"},
+            {"ticker": "EXCL", "name": "XL Axiata Tbk.", "sector": "Infrastructure", "sub_sector": "Telecommunication"},
+            {"ticker": "JSMR", "name": "Jasa Marga Tbk.", "sector": "Infrastructure", "sub_sector": "Toll Road Operators"},
+            {"ticker": "PGAS", "name": "Perusahaan Gas Negara Tbk.", "sector": "Infrastructure", "sub_sector": "Utilities"},
+            {"ticker": "WIKA", "name": "Wijaya Karya Tbk.", "sector": "Infrastructure", "sub_sector": "Heavy Construction"},
+            {"ticker": "PTPP", "name": "PP (Persero) Tbk.", "sector": "Infrastructure", "sub_sector": "Heavy Construction"},
+            
+            # Energi (Energy)
+            {"ticker": "ADRO", "name": "Adaro Energy Indonesia Tbk.", "sector": "Energy", "sub_sector": "Coal"},
+            {"ticker": "PTBA", "name": "Bukit Asam Tbk.", "sector": "Energy", "sub_sector": "Coal"},
+            {"ticker": "ITMG", "name": "Indo Tambangraya Megah Tbk.", "sector": "Energy", "sub_sector": "Coal"},
+            {"ticker": "MEDC", "name": "Medco Energi Internasional Tbk.", "sector": "Energy", "sub_sector": "Oil & Gas"},
+            {"ticker": "AKRA", "name": "AKR Corporindo Tbk.", "sector": "Energy", "sub_sector": "Oil & Gas Distributors"},
+            {"ticker": "ELSA", "name": "Elnusa Tbk.", "sector": "Energy", "sub_sector": "Oil & Gas Support Services"},
+            {"ticker": "HRUM", "name": "Harum Energy Tbk.", "sector": "Energy", "sub_sector": "Coal"},
+
+            # Industri & Otomotif (Industrials)
             {"ticker": "ASII", "name": "Astra International Tbk.", "sector": "Industrials", "sub_sector": "Automotive"},
+            {"ticker": "UNTR", "name": "United Tractors Tbk.", "sector": "Industrials", "sub_sector": "Heavy Equipment Sales"},
+            
+            # Barang Baku & Tambang Mineral (Basic Materials)
+            {"ticker": "ANTM", "name": "Aneka Tambang Tbk.", "sector": "Basic Materials", "sub_sector": "Metals & Mining"},
+            {"ticker": "INCO", "name": "Vale Indonesia Tbk.", "sector": "Basic Materials", "sub_sector": "Metals & Mining"},
+            {"ticker": "MDKA", "name": "Merdeka Copper Gold Tbk.", "sector": "Basic Materials", "sub_sector": "Metals & Mining"},
+            {"ticker": "TPIA", "name": "Chandra Asri Petrochemical Tbk.", "sector": "Basic Materials", "sub_sector": "Chemicals"},
+            {"ticker": "BRPT", "name": "Barito Pacific Tbk.", "sector": "Basic Materials", "sub_sector": "Chemicals"},
+            {"ticker": "SMGR", "name": "Semen Indonesia Tbk.", "sector": "Basic Materials", "sub_sector": "Construction Materials"},
+            {"ticker": "INTP", "name": "Indocement Tunggal Prakarsa Tbk.", "sector": "Basic Materials", "sub_sector": "Construction Materials"},
+            
+            # Consumer Goods (Consumer Non-Cyclicals)
             {"ticker": "UNVR", "name": "Unilever Indonesia Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Personal Care Products"},
-            {"ticker": "ADRO", "name": "Adaro Energy Indonesia Tbk.", "sector": "Basic Materials", "sub_sector": "Coal"},
-            {"ticker": "GOTO", "name": "GoTo Gojek Tokopedia Tbk.", "sector": "Technology", "sub_sector": "Internet & Direct Marketing Retail"}
+            {"ticker": "ICBP", "name": "Indofood CBP Sukses Makmur Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Packaged Foods"},
+            {"ticker": "INDF", "name": "Indofood Sukses Makmur Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Packaged Foods"},
+            {"ticker": "KLBF", "name": "Kalbe Farma Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Pharmaceuticals"},
+            {"ticker": "MYOR", "name": "Mayora Indah Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Packaged Foods"},
+            {"ticker": "HMSP", "name": "H.M. Sampoerna Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Tobacco"},
+            {"ticker": "GGRM", "name": "Gudang Garam Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Tobacco"},
+            {"ticker": "SIDO", "name": "Industri Jamu dan Farmasi Sido Muncul Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Pharmaceuticals"},
+            {"ticker": "AMRT", "name": "Sumber Alfaria Trijaya Tbk.", "sector": "Consumer Non-Cyclicals", "sub_sector": "Food Retailers"},
+            
+            # Ritel & Rekreasi (Consumer Cyclicals)
+            {"ticker": "ACES", "name": "Aspirasi Hidup Indonesia Tbk.", "sector": "Consumer Cyclicals", "sub_sector": "Home Improvement"},
+            {"ticker": "MAPI", "name": "Mitra Adiperkasa Tbk.", "sector": "Consumer Cyclicals", "sub_sector": "Department Stores"},
+            {"ticker": "ERAA", "name": "Erajaya Swasembada Tbk.", "sector": "Consumer Cyclicals", "sub_sector": "Electronics"},
+            
+            # Teknologi (Technology)
+            {"ticker": "GOTO", "name": "GoTo Gojek Tokopedia Tbk.", "sector": "Technology", "sub_sector": "Internet Services"},
+            {"ticker": "BUKA", "name": "Bukalapak.com Tbk.", "sector": "Technology", "sub_sector": "Internet Services"},
+            {"ticker": "EMTK", "name": "Elang Mahkota Teknologi Tbk.", "sector": "Technology", "sub_sector": "Holding Companies"},
+            
+            # Properti & Real Estate (Properties & Real Estate)
+            {"ticker": "BSDE", "name": "Bumi Serpong Damai Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
+            {"ticker": "CTRA", "name": "Ciputra Development Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
+            {"ticker": "PWON", "name": "Pakuwon Jati Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
+            {"ticker": "SMRA", "name": "Summarecon Agung Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
+            
+            # Kesehatan (Healthcare)
+            {"ticker": "HEAL", "name": "Medikaloka Hermina Tbk.", "sector": "Healthcare", "sub_sector": "Healthcare Providers"},
+            {"ticker": "MIKA", "name": "Mitra Keluarga Karyasehat Tbk.", "sector": "Healthcare", "sub_sector": "Healthcare Providers"}
         ]
 
     def sync_stocks_list(self):

@@ -92,32 +92,68 @@ class DataImportEngine:
     @retry_on_failure(retries=3, delay=10)
     def fetch_yahoo_finance_prices(self, ticker: str, start_date: date, end_date: date) -> List[Dict[str, Any]]:
         """
-        Mengambil data harga asli dari Yahoo Finance API.
+        Mengambil data harga asli dari Yahoo Finance API langsung via Requests (Bypass Block VPS).
         """
-        import yfinance as yf
+        import requests
         prices = []
         yf_ticker = f"{ticker.upper()}.JK"
         
-        start_str = start_date.strftime("%Y-%m-%d")
-        end_str = (end_date + timedelta(days=1)).strftime("%Y-%m-%d")
+        # Konversi start dan end date ke epoch timestamp
+        start_dt = datetime.combine(start_date, datetime.min.time())
+        end_dt = datetime.combine(end_date, datetime.max.time())
+        period1 = int(start_dt.timestamp())
+        period2 = int(end_dt.timestamp())
         
-        logger.info(f"Mengunduh data {yf_ticker} dari Yahoo Finance: {start_str} s.d {end_str}")
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{yf_ticker}"
+        params = {
+            "period1": period1,
+            "period2": period2,
+            "interval": "1d",
+            "events": "history"
+        }
+        
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        
+        logger.info(f"Mengunduh data {yf_ticker} dari Yahoo API Langsung: {start_date} s.d {end_date}")
         
         try:
-            t = yf.Ticker(yf_ticker)
-            df = t.history(start=start_str, end=end_str, interval="1d", auto_adjust=False)
-            
-            if df.empty:
-                logger.warning(f"Tidak ada data harga yang ditemukan untuk {yf_ticker} di yfinance.")
+            response = requests.get(url, params=params, headers=headers, timeout=15)
+            if response.status_code != 200:
+                logger.error(f"Gagal mengambil data dari Yahoo API. Status: {response.status_code}, Body: {response.text[:200]}")
                 return prices
                 
-            for idx, row in df.iterrows():
-                trade_date = idx.date()
-                close_val = float(row["Close"])
-                open_val = float(row["Open"])
-                high_val = float(row["High"])
-                low_val = float(row["Low"])
-                volume = int(row["Volume"])
+            data = response.json()
+            chart_data = data.get("chart", {}).get("result", [])
+            if not chart_data:
+                logger.warning(f"Data kosong untuk {yf_ticker}")
+                return prices
+                
+            result = chart_data[0]
+            timestamps = result.get("timestamp", [])
+            indicators = result.get("indicators", {}).get("quote", [{}])[0]
+            
+            opens = indicators.get("open", [])
+            highs = indicators.get("high", [])
+            lows = indicators.get("low", [])
+            closes = indicators.get("close", [])
+            volumes = indicators.get("volume", [])
+            
+            for i in range(len(timestamps)):
+                trade_date = date.fromtimestamp(timestamps[i])
+                
+                # Pastikan tidak ada data index out of range atau null
+                if i >= len(closes) or i >= len(opens) or i >= len(highs) or i >= len(lows) or i >= len(volumes):
+                    continue
+                if closes[i] is None or opens[i] is None or highs[i] is None or lows[i] is None or volumes[i] is None:
+                    continue
+                    
+                close_val = float(closes[i])
+                open_val = float(opens[i])
+                high_val = float(highs[i])
+                low_val = float(lows[i])
+                volume = int(volumes[i])
                 
                 if volume <= 0 or close_val <= 0:
                     continue
@@ -133,7 +169,7 @@ class DataImportEngine:
                     "frequency": max(1, int(volume // 100))
                 })
         except Exception as e:
-            logger.error(f"Gagal mengambil data dari yfinance untuk {yf_ticker}: {str(e)}")
+            logger.error(f"Gagal memproses data Yahoo API langsung untuk {yf_ticker}: {str(e)}")
             raise e
             
         return prices

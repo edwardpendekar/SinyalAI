@@ -105,7 +105,7 @@ class DataImportEngine:
         
         try:
             t = yf.Ticker(yf_ticker)
-            df = t.history(start=start_str, end=end_str, interval="1d")
+            df = t.history(start=start_str, end=end_str, interval="1d", auto_adjust=False)
             
             if df.empty:
                 logger.warning(f"Tidak ada data harga yang ditemukan untuk {yf_ticker} di yfinance.")

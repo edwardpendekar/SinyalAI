@@ -206,7 +206,7 @@ class ScannerResult(Base):
     target_price = Column(Numeric(12, 2))
     stop_loss = Column(Numeric(12, 2))
     expected_return = Column(Numeric(6, 2))
-    risk_reward_ratio = Column(Numeric(4, 2))
+    risk_reward_ratio = Column(Numeric(10, 2))
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     stock = relationship("Stock", back_populates="scanner_results")

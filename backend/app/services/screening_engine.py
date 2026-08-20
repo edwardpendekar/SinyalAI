@@ -245,7 +245,8 @@ class AIScreeningEngine:
                     
                     risk_amount = latest_close - stop_loss
                     reward_amount = target_price - latest_close
-                    risk_reward_ratio = reward_amount / (risk_amount + 1e-10)
+                    raw_ratio = reward_amount / (risk_amount + 1e-10)
+                    risk_reward_ratio = min(99.99, max(-99.99, float(raw_ratio)))
 
                 # D. Hitung Risk Level & Position Sizing (Kriteria Prompt 7)
                 der_val = float(fin.der) if (fin and fin.der) else 999.0

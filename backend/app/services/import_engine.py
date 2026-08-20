@@ -92,36 +92,50 @@ class DataImportEngine:
     @retry_on_failure(retries=3, delay=10)
     def fetch_yahoo_finance_prices(self, ticker: str, start_date: date, end_date: date) -> List[Dict[str, Any]]:
         """
-        Mengambil data harga dari Yahoo Finance API (Simulasi).
-        Di produksi, pasang package yfinance dan import `yfinance as yf`.
+        Mengambil data harga asli dari Yahoo Finance API.
         """
-        # Simulasi generator data harga harian
+        import yfinance as yf
         prices = []
-        current_date = start_date
-        base_price = 10000 if ticker == "BBCA" else 3000
+        yf_ticker = f"{ticker.upper()}.JK"
         
-        # Iterasi hari demi hari
-        while current_date <= end_date:
-            # Lewati akhir pekan (Sabtu & Minggu)
-            if current_date.weekday() < 5:
-                # Fluktuasi harga acak untuk simulasi
-                open_val = base_price + (hash(f"{ticker}-{current_date}") % 100) - 50
-                close_val = open_val + (hash(f"{ticker}-{current_date}-close") % 60) - 30
-                high_val = max(open_val, close_val) + (hash(f"{ticker}-{current_date}-high") % 20)
-                low_val = min(open_val, close_val) - (hash(f"{ticker}-{current_date}-low") % 20)
-                volume = 1000000 + (hash(f"{ticker}-{current_date}-vol") % 5000000)
+        start_str = start_date.strftime("%Y-%m-%d")
+        end_str = (end_date + timedelta(days=1)).strftime("%Y-%m-%d")
+        
+        logger.info(f"Mengunduh data {yf_ticker} dari Yahoo Finance: {start_str} s.d {end_str}")
+        
+        try:
+            t = yf.Ticker(yf_ticker)
+            df = t.history(start=start_str, end=end_str, interval="1d")
+            
+            if df.empty:
+                logger.warning(f"Tidak ada data harga yang ditemukan untuk {yf_ticker} di yfinance.")
+                return prices
                 
+            for idx, row in df.iterrows():
+                trade_date = idx.date()
+                close_val = float(row["Close"])
+                open_val = float(row["Open"])
+                high_val = float(row["High"])
+                low_val = float(row["Low"])
+                volume = int(row["Volume"])
+                
+                if volume <= 0 or close_val <= 0:
+                    continue
+                    
                 prices.append({
-                    "date": current_date,
-                    "open": float(open_val),
-                    "high": float(high_val),
-                    "low": float(low_val),
-                    "close": float(close_val),
-                    "volume": abs(int(volume)),
-                    "value": abs(int(volume * close_val)),
-                    "frequency": abs(int(volume // 100))
+                    "date": trade_date,
+                    "open": open_val,
+                    "high": high_val,
+                    "low": low_val,
+                    "close": close_val,
+                    "volume": volume,
+                    "value": int(volume * close_val),
+                    "frequency": max(1, int(volume // 100))
                 })
-            current_date += timedelta(days=1)
+        except Exception as e:
+            logger.error(f"Gagal mengambil data dari yfinance untuk {yf_ticker}: {str(e)}")
+            raise e
+            
         return prices
 
     def sync_daily_prices(self, stock_ticker: str, force_full: bool = False):

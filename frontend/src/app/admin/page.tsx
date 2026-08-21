@@ -22,6 +22,22 @@ export default function Admin() {
   
   const [loading, setLoading] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [systemStatus, setSystemStatus] = useState<{ status: string; message: string } | null>(null);
+
+  React.useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const res = await fetch("/api/v1/import/status");
+        if (res.ok) {
+          const data = await res.json();
+          setSystemStatus(data);
+        }
+      } catch (err) {
+        console.error("Gagal mengambil status sistem:", err);
+      }
+    };
+    fetchStatus();
+  }, []);
 
   const triggerAction = async (actionName: string, url: string, method: string = "POST") => {
     setLoading(actionName);
@@ -99,6 +115,27 @@ export default function Admin() {
           Kontrol server backend, tambahkan emiten kustom, dan lakukan sinkronisasi data secara langsung.
         </p>
       </div>
+
+      {/* Status Koneksi API Yahoo */}
+      {systemStatus && (
+        <div className={`p-4 rounded-xl flex items-start gap-3 border ${
+          systemStatus.status === "warning"
+            ? "bg-accent-rose/10 border-accent-rose/30 text-accent-rose"
+            : "bg-accent-emerald/10 border-accent-emerald/30 text-accent-emerald"
+        }`}>
+          {systemStatus.status === "warning" ? (
+            <AlertTriangle className="w-5 h-5 mt-0.5 flex-shrink-0 text-accent-rose" />
+          ) : (
+            <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0 text-accent-emerald" />
+          )}
+          <div>
+            <p className="text-sm font-semibold">
+              {systemStatus.status === "warning" ? "Peringatan Sistem: Yahoo API Terblokir" : "Status Koneksi API Yahoo Finance"}
+            </p>
+            <p className="text-xs opacity-90 mt-0.5">{systemStatus.message}</p>
+          </div>
+        </div>
+      )}
 
       {/* Alert Notification Box */}
       {message && (

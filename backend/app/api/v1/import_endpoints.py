@@ -123,3 +123,37 @@ def add_ticker(ticker: str, name: str = None, sector: str = None, sub_sector: st
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Gagal menambahkan emiten: {str(e)}"
         )
+
+@router.get("/status", status_code=status.HTTP_200_OK)
+def get_import_status(db: Session = Depends(get_db)):
+    """
+    Mengecek status kesehatan koneksi Yahoo Finance API berdasarkan log kesalahan terbaru.
+    """
+    try:
+        from datetime import datetime, timedelta
+        from app.db.models import SystemLog
+        
+        # Cari log error terbaru terkait sync fundamental/harga dalam 3 hari terakhir
+        three_days_ago = datetime.utcnow() - timedelta(days=3)
+        error_log = db.query(SystemLog).filter(
+            SystemLog.level == "ERROR",
+            SystemLog.module.in_(["sync_financial_statements", "sync_daily_prices", "fetch_yahoo_finance_fundamentals"]),
+            SystemLog.created_at >= three_days_ago
+        ).order_by(SystemLog.created_at.desc()).first()
+        
+        if error_log:
+            return {
+                "status": "warning",
+                "message": f"Yahoo Finance API terblokir pada {error_log.created_at.strftime('%Y-%m-%d %H:%M')}: {error_log.message}. Sistem saat ini menggunakan fallback database lokal. Silakan hubungi developer untuk pembaruan koding bypass!",
+                "timestamp": str(error_log.created_at)
+            }
+            
+        return {
+            "status": "ok",
+            "message": "Koneksi API Yahoo Finance berjalan dengan normal (100% Live)."
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Gagal mengecek status kesehatan API: {str(e)}"
+        }

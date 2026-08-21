@@ -518,6 +518,7 @@ class DataImportEngine:
                             
         except Exception as e:
             logger.warning(f"Gagal mengambil live fundamental {yf_ticker} (Bypass Crumb Gagal). Menggunakan fallback DB Lokal: {str(e)}")
+            self.log_to_system("ERROR", "fetch_yahoo_finance_fundamentals", f"Gagal mengambil live fundamental {yf_ticker}. Error: {str(e)}")
             
         return output
 

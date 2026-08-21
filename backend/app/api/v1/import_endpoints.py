@@ -68,6 +68,13 @@ def sync_prices(ticker: str = None, force_full: bool = False, db: Session = Depe
             screening_engine = AIScreeningEngine(db)
             screening_engine.run_screening_and_scoring(date.today())
             
+            # Hapus log error lama agar status di UI Admin pulih menjadi hijau (Healthy)
+            from app.db.models import SystemLog
+            db.query(SystemLog).filter(
+                SystemLog.module.in_(["sync_financial_statements", "sync_daily_prices", "fetch_yahoo_finance_fundamentals"])
+            ).delete(synchronize_session=False)
+            db.commit()
+            
         return {"status": "success", "message": "Daily prices, indicators, divergence detection, and AI screening completed"}
     except Exception as e:
         raise HTTPException(
@@ -115,6 +122,13 @@ def add_ticker(ticker: str, name: str = None, sector: str = None, sub_sector: st
         from app.services.screening_engine import AIScreeningEngine
         screening_engine = AIScreeningEngine(db)
         screening_engine.run_screening_and_scoring(date.today())
+        
+        # Hapus log error lama agar status kembali hijau
+        from app.db.models import SystemLog
+        db.query(SystemLog).filter(
+            SystemLog.module.in_(["sync_financial_statements", "sync_daily_prices", "fetch_yahoo_finance_fundamentals"])
+        ).delete(synchronize_session=False)
+        db.commit()
         
         return {"status": "success", "message": f"Emiten {ticker_upper} berhasil ditambahkan dan dianalisis."}
     except Exception as e:

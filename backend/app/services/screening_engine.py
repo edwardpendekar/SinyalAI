@@ -232,16 +232,19 @@ class AIScreeningEngine:
                     # Estimasi target harga wajar: PBV = 2.0 dan PER = 15.0
                     target_pbv = float(fin.book_value) * 2.0
                     target_per = float(fin.eps) * 15.0
-                    target_price = (target_pbv + target_per) / 2.0
+                    raw_target = (target_pbv + target_per) / 2.0
+                    target_price = min(9999999999.99, max(0.0, float(raw_target)))
                     
                     if target_price > latest_close:
-                        expected_return = ((target_price - latest_close) / latest_close) * 100
+                        raw_return = ((target_price - latest_close) / latest_close) * 100
                     else:
-                        expected_return = 0.0
+                        raw_return = 0.0
+                    expected_return = min(9999.99, max(-9999.99, float(raw_return)))
 
                     # C. Stop Loss & Risk Reward (Berdasarkan ATR volatilitas)
                     atr_val = float(ti.atr if ti.atr else latest_close * 0.05)
-                    stop_loss = latest_close - (2 * atr_val) # Stop loss 2x ATR di bawah harga close
+                    raw_sl = latest_close - (2 * atr_val) # Stop loss 2x ATR di bawah harga close
+                    stop_loss = min(9999999999.99, max(0.0, float(raw_sl)))
                     
                     risk_amount = latest_close - stop_loss
                     reward_amount = target_price - latest_close

@@ -531,6 +531,29 @@ class DataImportEngine:
         try:
             fund = self.fetch_yahoo_finance_fundamentals(stock.ticker)
             
+            # Fungsi pembatas (clamping) untuk mencegah numeric overflow di PostgreSQL
+            def clamp(val, min_val, max_val):
+                if val is None:
+                    return 0.0
+                try:
+                    val_float = float(val)
+                    import math
+                    if math.isnan(val_float) or math.isinf(val_float):
+                        return 0.0
+                    return max(min_val, min(max_val, val_float))
+                except:
+                    return 0.0
+
+            # Lakukan clamping ke batas Numeric(6,2) -> maks 9999.99
+            roe_clamped = clamp(fund.get("roe"), -9999.99, 9999.99)
+            der_clamped = clamp(fund.get("der"), -9999.99, 9999.99)
+            per_clamped = clamp(fund.get("per"), -9999.99, 9999.99)
+            pbv_clamped = clamp(fund.get("pbv"), -9999.99, 9999.99)
+            dy_clamped = clamp(fund.get("dividend_yield"), -9999.99, 9999.99)
+            
+            # EPS ke batas Numeric(10,2) -> maks 99999999.99
+            eps_clamped = clamp(fund.get("eps"), -99999999.99, 99999999.99)
+            
             existing = self.db.query(Financial).filter(
                 Financial.stock_id == stock.id,
                 Financial.year == 2026,
@@ -542,28 +565,28 @@ class DataImportEngine:
                     stock_id=stock.id,
                     year=2026,
                     quarter="Q1",
-                    revenue=fund["revenue"],
-                    net_income=fund["net_income"],
-                    eps=fund["eps"],
-                    roe=fund["roe"],
-                    der=fund["der"],
-                    per=fund["per"],
-                    pbv=fund["pbv"],
-                    dividend_yield=fund["dividend_yield"],
-                    book_value=fund["book_value"],
-                    cash_flow_operating=int(fund["net_income"] * 0.8)
+                    revenue=fund.get("revenue", 0),
+                    net_income=fund.get("net_income", 0),
+                    eps=eps_clamped,
+                    roe=roe_clamped,
+                    der=der_clamped,
+                    per=per_clamped,
+                    pbv=pbv_clamped,
+                    dividend_yield=dy_clamped,
+                    book_value=fund.get("book_value", 0),
+                    cash_flow_operating=int(fund.get("net_income", 0) * 0.8) if fund.get("net_income") else 0
                 )
                 self.db.add(new_fin)
             else:
-                existing.revenue = fund["revenue"]
-                existing.net_income = fund["net_income"]
-                existing.eps = fund["eps"]
-                existing.roe = fund["roe"]
-                existing.der = fund["der"]
-                existing.per = fund["per"]
-                existing.pbv = fund["pbv"]
-                existing.dividend_yield = fund["dividend_yield"]
-                existing.book_value = fund["book_value"]
+                existing.revenue = fund.get("revenue", 0)
+                existing.net_income = fund.get("net_income", 0)
+                existing.eps = eps_clamped
+                existing.roe = roe_clamped
+                existing.der = der_clamped
+                existing.per = per_clamped
+                existing.pbv = pbv_clamped
+                existing.dividend_yield = dy_clamped
+                existing.book_value = fund.get("book_value", 0)
                 
             self.db.commit()
             logger.info(f"Sync Laporan Keuangan {stock_ticker} selesai.")

@@ -138,14 +138,14 @@ def get_import_status(db: Session = Depends(get_db)):
         error_log = db.query(SystemLog).filter(
             SystemLog.level == "ERROR",
             SystemLog.module.in_(["sync_financial_statements", "sync_daily_prices", "fetch_yahoo_finance_fundamentals"]),
-            SystemLog.created_at >= three_days_ago
-        ).order_by(SystemLog.created_at.desc()).first()
+            SystemLog.timestamp >= three_days_ago
+        ).order_by(SystemLog.timestamp.desc()).first()
         
         if error_log:
             return {
                 "status": "warning",
-                "message": f"Yahoo Finance API terblokir pada {error_log.created_at.strftime('%Y-%m-%d %H:%M')}: {error_log.message}. Sistem saat ini menggunakan fallback database lokal. Silakan hubungi developer untuk pembaruan koding bypass!",
-                "timestamp": str(error_log.created_at)
+                "message": f"Yahoo Finance API terblokir pada {error_log.timestamp.strftime('%Y-%m-%d %H:%M')}: {error_log.message}. Sistem saat ini menggunakan fallback database lokal. Silakan hubungi developer untuk pembaruan koding bypass!",
+                "timestamp": str(error_log.timestamp)
             }
             
         return {

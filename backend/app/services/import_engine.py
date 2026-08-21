@@ -531,6 +531,37 @@ class DataImportEngine:
         try:
             fund = self.fetch_yahoo_finance_fundamentals(stock.ticker)
             
+            # Ambil harga close terbaru untuk perhitungan PBV & PER yang akurat
+            latest_price = self.db.query(DailyPrice).filter(
+                DailyPrice.stock_id == stock.id
+            ).order_by(DailyPrice.date.desc()).first()
+            close_price = float(latest_price.close) if latest_price else None
+            
+            # Deteksi mata uang Book Value (USD vs IDR). Di BEI, tidak ada BV saham aktif < 50.0 IDR.
+            book_value_raw = fund.get("book_value", 0.0)
+            book_value_idr = book_value_raw
+            if book_value_raw and 0 < book_value_raw < 50.0:
+                book_value_idr = book_value_raw * 15500.0
+                
+            # Deteksi mata uang EPS (USD vs IDR). 
+            # Jika harga saham > 500 IDR dan EPS sangat kecil (< 5.0), dipastikan dilaporkan dalam USD oleh Yahoo.
+            eps_raw = fund.get("eps", 0.0)
+            eps_idr = eps_raw
+            if close_price and close_price > 500.0 and eps_raw and 0 < eps_raw < 5.0:
+                eps_idr = eps_raw * 15500.0
+                
+            # Hitung PBV secara akurat (Close Price / Book Value IDR)
+            pbv_calc = fund.get("pbv")
+            if close_price and book_value_idr > 0:
+                pbv_calc = close_price / book_value_idr
+                
+            # Hitung PER secara akurat (Close Price / EPS IDR)
+            per_calc = fund.get("per")
+            if close_price and eps_idr > 0:
+                per_calc = close_price / eps_idr
+            elif close_price and eps_idr < 0:
+                per_calc = close_price / eps_idr
+
             # Fungsi pembatas (clamping) untuk mencegah numeric overflow di PostgreSQL
             def clamp(val, min_val, max_val):
                 if val is None:
@@ -547,12 +578,12 @@ class DataImportEngine:
             # Lakukan clamping ke batas Numeric(6,2) -> maks 9999.99
             roe_clamped = clamp(fund.get("roe"), -9999.99, 9999.99)
             der_clamped = clamp(fund.get("der"), -9999.99, 9999.99)
-            per_clamped = clamp(fund.get("per"), -9999.99, 9999.99)
-            pbv_clamped = clamp(fund.get("pbv"), -9999.99, 9999.99)
+            per_clamped = clamp(per_calc, -9999.99, 9999.99)
+            pbv_clamped = clamp(pbv_calc, -9999.99, 9999.99)
             dy_clamped = clamp(fund.get("dividend_yield"), -9999.99, 9999.99)
             
             # EPS ke batas Numeric(10,2) -> maks 99999999.99
-            eps_clamped = clamp(fund.get("eps"), -99999999.99, 99999999.99)
+            eps_clamped = clamp(eps_idr, -99999999.99, 99999999.99)
             
             existing = self.db.query(Financial).filter(
                 Financial.stock_id == stock.id,
@@ -573,7 +604,7 @@ class DataImportEngine:
                     per=per_clamped,
                     pbv=pbv_clamped,
                     dividend_yield=dy_clamped,
-                    book_value=fund.get("book_value", 0),
+                    book_value=book_value_idr,
                     cash_flow_operating=int(fund.get("net_income", 0) * 0.8) if fund.get("net_income") else 0
                 )
                 self.db.add(new_fin)
@@ -586,7 +617,7 @@ class DataImportEngine:
                 existing.per = per_clamped
                 existing.pbv = pbv_clamped
                 existing.dividend_yield = dy_clamped
-                existing.book_value = fund.get("book_value", 0)
+                existing.book_value = book_value_idr
                 
             self.db.commit()
             logger.info(f"Sync Laporan Keuangan {stock_ticker} selesai.")

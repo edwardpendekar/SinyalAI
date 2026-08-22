@@ -16,7 +16,8 @@ import {
   History, 
   Settings, 
   ShieldAlert,
-  Zap
+  Zap,
+  Layers
 } from "lucide-react";
 
 export default function Sidebar() {
@@ -28,6 +29,7 @@ export default function Sidebar() {
     { name: "Hidden Divergence", href: "/hidden-divergence", icon: TrendingUp },
     { name: "Watchlist", href: "/watchlist", icon: Bookmark },
     { name: "Portfolio", href: "/portfolio", icon: Briefcase },
+    { name: "Rekap Aset", href: "/rekap-aset", icon: Layers },
     { name: "Alerts", href: "/alerts", icon: Bell },
     { name: "Financial", href: "/financial", icon: FileSpreadsheet },
     { name: "Dividend", href: "/dividend", icon: Coins },

@@ -62,6 +62,7 @@ class DataImportEngine:
             {"ticker": "BRIS", "name": "Bank Syariah Indonesia Tbk.", "sector": "Financials", "sub_sector": "Banks"},
             {"ticker": "ARTO", "name": "Bank Jago Tbk.", "sector": "Financials", "sub_sector": "Banks"},
             {"ticker": "BBTN", "name": "Bank Tabungan Negara Tbk.", "sector": "Financials", "sub_sector": "Banks"},
+            {"ticker": "BBKP", "name": "KB Bank Tbk.", "sector": "Financials", "sub_sector": "Banks"},
             
             # Telekomunikasi & Infrastruktur (Infrastructure)
             {"ticker": "TLKM", "name": "Telkom Indonesia Tbk.", "sector": "Infrastructure", "sub_sector": "Telecommunication"},
@@ -114,12 +115,14 @@ class DataImportEngine:
             {"ticker": "GOTO", "name": "GoTo Gojek Tokopedia Tbk.", "sector": "Technology", "sub_sector": "Internet Services"},
             {"ticker": "BUKA", "name": "Bukalapak.com Tbk.", "sector": "Technology", "sub_sector": "Internet Services"},
             {"ticker": "EMTK", "name": "Elang Mahkota Teknologi Tbk.", "sector": "Technology", "sub_sector": "Holding Companies"},
+            {"ticker": "DMMX", "name": "Digital Mediatama Maxima Tbk.", "sector": "Technology", "sub_sector": "Internet Services"},
             
             # Properti & Real Estate (Properties & Real Estate)
             {"ticker": "BSDE", "name": "Bumi Serpong Damai Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
             {"ticker": "CTRA", "name": "Ciputra Development Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
             {"ticker": "PWON", "name": "Pakuwon Jati Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
             {"ticker": "SMRA", "name": "Summarecon Agung Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
+            {"ticker": "DMAS", "name": "Puradelta Lestari Tbk.", "sector": "Properties & Real Estate", "sub_sector": "Real Estate"},
             
             # Kesehatan (Healthcare)
             {"ticker": "HEAL", "name": "Medikaloka Hermina Tbk.", "sector": "Healthcare", "sub_sector": "Healthcare Providers"},

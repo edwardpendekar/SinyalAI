@@ -28,7 +28,7 @@ export default function Watchlist() {
     if (saved) {
       setWatchlist(JSON.parse(saved));
     } else {
-      const defaultWatchlist = ["BBCA", "TLKM", "BBRI", "ADRO", "GOTO"];
+      const defaultWatchlist = ["DMAS", "DMMX", "BBKP", "ADRO", "BBCA"];
       setWatchlist(defaultWatchlist);
       localStorage.setItem("sinyalai_watchlist", JSON.stringify(defaultWatchlist));
     }

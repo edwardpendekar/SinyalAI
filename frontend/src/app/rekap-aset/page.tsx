@@ -134,6 +134,7 @@ export default function RekapAset() {
       setRows(initialRows);
       localStorage.setItem("sinyalai_asset_rekap", JSON.stringify(initialRows));
       localStorage.setItem("sinyalai_asset_rekap_months", JSON.stringify(months));
+    }
   }, []);
 
   // Auto-scroll ke kolom kanan (data paling baru) saat halaman atau data dimuat

@@ -134,8 +134,19 @@ export default function RekapAset() {
       setRows(initialRows);
       localStorage.setItem("sinyalai_asset_rekap", JSON.stringify(initialRows));
       localStorage.setItem("sinyalai_asset_rekap_months", JSON.stringify(months));
-    }
   }, []);
+
+  // Auto-scroll ke kolom kanan (data paling baru) saat halaman atau data dimuat
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const timer = setTimeout(() => {
+        if (scrollContainerRef.current) {
+          scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [months, rows]);
 
   const saveToLocal = (newRows: RowData[], newMonths?: string[]) => {
     const activeMonths = newMonths || months;
